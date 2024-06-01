@@ -1,4 +1,4 @@
-  Projeto em Pyhton, utilizando a biblioteca Tkinter.
+  Projeto em Python, utilizando a biblioteca Tkinter.
           P1 Ciência da Computação, Unipê
           
 Alunas: Daniela, Maria Luiza, Ana Clara, Leandra, Lavínia e Eduarda
