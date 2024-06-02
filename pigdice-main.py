@@ -14,19 +14,19 @@ def display_scoreboard():
     scoreboard.delete('1.0', tk.END)
     scoreboard.insert(tk.END, f"\n{'#' * 20}\n")
     scoreboard.insert(tk.END, f"Pontuação total de {username.get()}: {player_score}\n")
-    scoreboard.insert(tk.END, f"Pontuação total do {comp_name}: {computer_score}\n")
+    scoreboard.insert(tk.END, f"Pontuação total do Sr. {comp_name}: {computer_score}\n")
     scoreboard.insert(tk.END, f"Rounds jogados: {rounds_played}\n")
     scoreboard.insert(tk.END, f"{'#' * 20}\n")
     scoreboard.config(state=tk.DISABLED)
 
-def roll_dice():
+def roll_dice(event=None):  # Accept an event argument to handle <Return> key press
     global player_score, computer_score, rounds_played
 
     player_die_value = randint(1, 6)
     computer_die_value = randint(1, 6)
     
     player_roll_label.config(text=f"{username.get()} rolou {player_die_value}")
-    computer_roll_label.config(text=f"{comp_name} rolou {computer_die_value}")
+    computer_roll_label.config(text=f"Sr. {comp_name} rolou {computer_die_value}")
 
     rounds_played += 1
 
@@ -40,9 +40,11 @@ def roll_dice():
         show_winner_window(username.get().upper())
         roll_button.config(state=tk.DISABLED)
     elif computer_score >= 30:
-        result_label.config(text=f"{comp_name} ganhou com uma pontuação total de {computer_score}!")
-        show_winner_window(comp_name.upper())
+        result_label.config(text=f"Sr. {comp_name} ganhou com uma pontuação total de {computer_score}!")
+        show_winner_window(f"SR. {comp_name.upper()}")
         roll_button.config(state=tk.DISABLED)
+    
+    roll_button.focus_set()
 
 def show_winner_window(winner_name):
     winner_window = tk.Toplevel(root)
@@ -91,6 +93,8 @@ username_label.pack()
 
 username = tk.Entry(root)
 username.pack(pady=5)
+
+username.bind("<Return>", roll_dice)
 
 roll_button = tk.Button(root, text="Role o dado!", command=roll_dice)
 roll_button.pack(pady=10)
