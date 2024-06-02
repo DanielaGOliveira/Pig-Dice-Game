@@ -1,5 +1,6 @@
 import tkinter as tk
 from random import randint
+from tkinter import PhotoImage
 
 def check_die(current_score, die_value):
     return current_score + die_value
@@ -13,7 +14,7 @@ def display_scoreboard():
     scoreboard.insert(tk.END, f"Rounds jogados: {rounds_played}\n")
     scoreboard.insert(tk.END, f"{'#' * 20}\n")
     scoreboard.config(state=tk.DISABLED)
-
+    
 def roll_dice():
     global player_score, computer_score, rounds_played
 
@@ -21,7 +22,7 @@ def roll_dice():
     computer_die_value = randint(1, 6)
     
     player_roll_label.config(text=f"{username.get()} rolou {player_die_value}")
-    computer_roll_label.config(text=f"Computer rolou {computer_die_value}")
+    computer_roll_label.config(text=f"Computador rolou {computer_die_value}")
 
     rounds_played += 1
 
@@ -31,12 +32,12 @@ def roll_dice():
     display_scoreboard()
 
     if player_score >= 30:
-        result_label.config(text=f"{username.get()} ganhou  com uma pontuação total de {player_score}!")
-        show_winner_window(username.get().upper())
+        result_label.config(text=f"{username.get()} ganhou com uma pontuação total de {player_score}!")
+        show_winner_window(username.get())
         roll_button.config(state=tk.DISABLED)
     elif computer_score >= 30:
-        result_label.config(text=f"Computador ganhou  com uma pontuação total de {computer_score}!")
-        show_winner_window("COMPUTADOR")
+        result_label.config(text=f"Computador ganhou com uma pontuação total de {computer_score}!")
+        show_winner_window("Computador")
         roll_button.config(state=tk.DISABLED)
 
 def show_winner_window(winner_name):
@@ -45,10 +46,28 @@ def show_winner_window(winner_name):
     winner_label = tk.Label(winner_window, text=f"O vencedor é {winner_name}!", font=("Arial", 18))
     winner_label.pack(padx=20, pady=20)
 
-# Initialize the main window
+# Inicialização da janela principal
 root = tk.Tk()
 root.title("Pig Dice Game")
 root.configure(bg="pink")
+
+image=tk.PhotoImage(file="Background_600x600.png")
+image=image.subsample(1,1)
+
+label_image=tk.Label(image=image)
+label_image.place(x=0, y=0, relheight=1, relwidth=1)
+
+def center_window(window, width, height):
+    screen_width = window.winfo_screenwidth()
+    screen_height = window.winfo_screenheight()
+    x_coordinate = (screen_width / 2) - (width / 2)
+    y_coordinate = (screen_height / 2) - (height / 2)
+    window.geometry("%dx%d+%d+%d" % (width, height, x_coordinate, y_coordinate))
+
+# Definir a geometria da janela 
+window_width = 600
+window_height = 600
+center_window(root, window_width, window_height)
 
 welcome_message = """
         Bem-vindo ao 'Pig', um jogo de dados!
@@ -60,10 +79,10 @@ welcome_message = """
     O número total de rodadas jogadas também é rastreado.
 """
 
-welcome_label = tk.Label(root, text=welcome_message, justify=tk.LEFT)
+welcome_label = tk.Label(root, text=welcome_message, justify=tk.LEFT, bg="pink")
 welcome_label.pack(pady=10)
 
-username_label = tk.Label(root, text="Qual o seu nome?")
+username_label = tk.Label(root, text="Qual o seu nome?", bg="#FFECE9")
 username_label.pack()
 
 username = tk.Entry(root)
@@ -72,21 +91,20 @@ username.pack(pady=5)
 roll_button = tk.Button(root, text="Role o dado!", command=roll_dice)
 roll_button.pack(pady=10)
 
-player_roll_label = tk.Label(root, text="")
+player_roll_label = tk.Label(root, text="", bg="#FFECE9")
 player_roll_label.pack()
 
-computer_roll_label = tk.Label(root, text="")
+computer_roll_label = tk.Label(root, text="", bg="#FFECE9")
 computer_roll_label.pack()
 
-result_label = tk.Label(root, text="")
+result_label = tk.Label(root, text="", bg="#FFECE9")
 result_label.pack(pady=10)
 
-scoreboard = tk.Text(root, height=10, width=50, state=tk.DISABLED)
-scoreboard.pack(pady=10)
+scoreboard = tk.Text(root, height=10, width=30, state=tk.DISABLED, font=("Calibri", 10))
+scoreboard.pack()
 
 player_score = 0
 computer_score = 0
 rounds_played = 0
 
-# Start the Tkinter event loop
 root.mainloop()
