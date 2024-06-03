@@ -18,8 +18,9 @@ def display_scoreboard():
     scoreboard.insert(tk.END, f"Rounds jogados: {rounds_played}\n")
     scoreboard.insert(tk.END, f"{'#' * 20}\n")
     scoreboard.config(state=tk.DISABLED)
+    
 
-def roll_dice(event=None):  # Accept an event argument to handle <Return> key press
+def roll_dice(event=None): 
     global player_score, computer_score, rounds_played
 
     player_die_value = randint(1, 6)
@@ -37,30 +38,44 @@ def roll_dice(event=None):  # Accept an event argument to handle <Return> key pr
 
     if player_score >= 30:
         result_label.config(text=f"{username.get()} ganhou com uma pontuação total de {player_score}!")
-        show_winner_window(username.get().upper())
+        show_winner_window(username.get().upper(), True) 
         roll_button.config(state=tk.DISABLED)
     elif computer_score >= 30:
         result_label.config(text=f"Sr. {comp_name} ganhou com uma pontuação total de {computer_score}!")
-        show_winner_window(f"SR. {comp_name.upper()}")
+        show_winner_window(f"SR. {comp_name.upper()}", False) 
         roll_button.config(state=tk.DISABLED)
     
+   
     roll_button.focus_set()
 
-def show_winner_window(winner_name):
+def show_winner_window(winner_name, user_win):
     winner_window = tk.Toplevel(root)
     winner_window.title("Vencedor!")
+    
+    if user_win:
+        winner_gif = tk.PhotoImage(file="user_win.gif")
+        winner_gif = winner_gif.subsample(2, 2)
+    else:
+        winner_gif = tk.PhotoImage(file="comp_win.gif")
+
+    gif_label = tk.Label(winner_window, image=winner_gif)
+    gif_label.image = winner_gif
+    gif_label.pack(padx=20, pady=20)
+    
     winner_label = tk.Label(winner_window, text=f"O vencedor é {winner_name}!", font=("Arial", 18))
     winner_label.pack(padx=20, pady=20)
 
-# Inicialização da janela principal
+    winner_window.geometry("+%d+%d" % (root.winfo_rootx() + 50, root.winfo_rooty() + 50))
+
+
 root = tk.Tk()
 root.title("Pig Dice Game")
 root.configure(bg="pink")
 
-image=tk.PhotoImage(file="piggie.png")
-image=image.subsample(1,1)
+image = tk.PhotoImage(file="piggie.png")
+image = image.subsample(1, 1)
 
-label_image=tk.Label(image=image)
+label_image = tk.Label(image=image)
 label_image.place(x=0, y=0, relheight=1, relwidth=1)
 
 def center_window(window, width, height):
@@ -70,7 +85,7 @@ def center_window(window, width, height):
     y_coordinate = (screen_height / 2) - (height / 2)
     window.geometry("%dx%d+%d+%d" % (width, height, x_coordinate, y_coordinate))
 
-# Definir a geometria da janela
+
 window_width = 600
 window_height = 600
 center_window(root, window_width, window_height)
@@ -94,6 +109,7 @@ username_label.pack()
 username = tk.Entry(root)
 username.pack(pady=5)
 
+
 username.bind("<Return>", roll_dice)
 
 roll_button = tk.Button(root, text="Role o dado!", command=roll_dice)
@@ -114,5 +130,6 @@ scoreboard.pack()
 player_score = 0
 computer_score = 0
 rounds_played = 0
+
 
 root.mainloop()
